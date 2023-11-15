@@ -2,7 +2,7 @@
  * Program name: pruebaSegmentos.ino
  * Author: Álvaro R.
  * Date: 14th november 2023
- * Description: This program tests all segments in the display.
+ * Description: rogram tests all segments in the display.
  */
 
 int segmentPins[] = {3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14};
