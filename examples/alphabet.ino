@@ -2,28 +2,30 @@
  * Program name: pruebaSegmentos.ino
  * Author: Álvaro R.
  * Date: 14th november 2023
- * Description: Displays the alphabet on a single display
+ * Description: This program tests all segments in the display.
+ * Board: MH ET Attiny88
  */
-// Definimos los pines para el display de 8 segmentos
+
+
 int segmentPins[] = {3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14};
 
-// Definimos los números del 1 al 6 en formato de 8 segmentos:
+// Pinout of the display
+//                             F  G  A GND H  B
+// F A A A A A B               12 11 10 09 08 07
+// F G       H B               |  |  |  |  |  |
+// F G       H B              ******************
+// F    G H    B              *       |8|.     *
+// E    J I    C              *                *
+// E J       I C              ******************
+// E J       I C               |  |  |  |  |  |
+// E D D D D D C   K          01 02 03 04 05 06
+//                            E  J  D  I  C  K
 
-// Pines del display personalizado.
-// 12 10 10 10 10 07               12 11 10 09 08 07
-// 12 11       08 07               |  |  |  |  |  |
-// 12 11       08 07              ******************
-// 12    11 08    07              *       |8|.     *
-// 01    02 04    05              *                *
-// 01 02       04 05              ******************
-// 01 02       04 05   **          |  |  |  |  |  |
-// 01 03 03 03 03 05  *06*         01 02 03 04 05 06
-//                     **
-
-const byte numbers[38][11] PROGMEM = {
-// Pin Attiny (Pin display +2)
-// 3  4  5  6  7  8  9  10 11 12 13 14
-// E  J  D  I  C  K  B  H  A  G  F
+const int numChar PROGMEM = 38;//Number of characters in the character set.
+const byte characterSet[38][numChar] PROGMEM = {//"Character set"
+  
+// 3  4  5  6  7  8  9  10 11 12 13 14 (Attiny pin)
+// E  J  D  I  C  K  B  H  A  G  F     (Display segment)
   {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, // ''
   {1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1}, // 'O'
   {0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0}, // 'I'
@@ -61,35 +63,21 @@ const byte numbers[38][11] PROGMEM = {
   {0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0}, // 'X'
   {0, 0, 0, 0, 1, 0, 1, 1, 0, 1, 0}, // 'Y'
   {0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0}, // '5'
-// E  J  D  I  C  K  B  H  A  G  F
   {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}, // '|8|.'
-// E  J  D  I  C  K  B  H  A  G  F
+// E  J  D  I  C  K  B  H  A  G  F     (Display segment)
 };
 
 void setup() {
-  // Configuramos los pines del display como salida
   for (int i = 0; i < 11; i++) {
     pinMode(segmentPins[i], OUTPUT);
   }
-
-  // Configuramos el pin del botón como entrada
- //pinMode(2, INPUT_PULLUP);
 }
 
 void loop() {
-  // Si se presiona el botón
-  //if (digitalRead(2) == LOW) {
-    // Generamos un número aleatorio del 1 al 6
-    //int number = random(1, 7);
-    //delay(1000);
-
-    // Mostramos el número en el display
-    for (int i = 0; i < 38; i++) {
-      for (int j = 0; j<11; j ++){
-        digitalWrite(segmentPins[j], pgm_read_byte(&(numbers[i][j])));
+    for (int i = 0; i < numChar; i++) {//Iterate character
+      for (int j = 0; j<11; j ++){//Draw character
+        digitalWrite(segmentPins[j], pgm_read_byte(&(characterSet[i][j])));
       }
-      delay(300);
+      delay(600);
     }
-    // Esperamos un segundo antes de apagar el display
-    //delay(1000);
 }
